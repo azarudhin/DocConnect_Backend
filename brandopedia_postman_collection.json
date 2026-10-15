@@ -1,0 +1,251 @@
+{
+  "info": {
+    "_postman_id": "b78b54f9-2b02-4ec4-9d1a-4c28fbe6b149",
+    "name": "Docconnect API Collection",
+    "description": "API collection for Docconnect healthcare professional network (Brandopedia). Includes Feed, Users, Connections, and Likes with standardized response structures.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "currentUserId",
+      "value": "6acf3bd160ea3589df9e02e0",
+      "type": "string"
+    },
+    {
+      "key": "targetUserId",
+      "value": "6acf3bd160ea3589df9e02e1",
+      "type": "string"
+    },
+    {
+      "key": "samplePostId",
+      "value": "6acf3bd160ea3589df9e02e5",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Feed",
+      "item": [
+        {
+          "name": "Get Feed (Standardized Response)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts"]
+            },
+            "description": "Fetch the feed containing currentUser and posts array"
+          },
+          "response": [
+            {
+              "name": "Feed Success Example",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/posts",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["posts"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"Success\",\n  \"message\": \"Feed fetched successfully\",\n  \"data\": {\n    \"currentUser\": {\n      \"id\": \"6acf3bd160ea3589df9e02e0\",\n      \"name\": \"Dr. Arjun Mehta\",\n      \"occupation\": \"Cardiology\",\n      \"profileImage\": \"http://localhost:5000/images/user1.png\",\n      \"connectionsCount\": 2\n    },\n    \"posts\": [\n      {\n        \"id\": \"6acf3bd160ea3589df9e02e5\",\n        \"content\": \"Welcome to Docconnect! We're building India's largest healthcare professional network. Connect with doctors, nurses, pharmacists, and medical students across the country.\",\n        \"images\": [\n          \"http://localhost:5000/images/post1.png\"\n        ],\n        \"likesCount\": 5,\n        \"sharesCount\": 3,\n        \"commentsCount\": 0,\n        \"isLiked\": false,\n        \"createdAt\": \"2026-10-14T08:22:41.387Z\",\n        \"author\": {\n          \"id\": \"6acf3bd160ea3589df9e02e1\",\n          \"name\": \"Docconnect\",\n          \"occupation\": \"Healthcare Technology\",\n          \"profileImage\": \"http://localhost:5000/images/user2.png\",\n          \"connectionsCount\": 2\n        }\n      }\n    ]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Like / Unlike Post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isLiked\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts/{{samplePostId}}/like",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts", "{{samplePostId}}", "like"]
+            },
+            "description": "Toggle like on a post (pass isLiked: true to like, isLiked: false to unlike)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get Other Users List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"]
+            },
+            "description": "Returns { status: 'Success', message: 'Users fetched successfully', data: [...] }"
+          },
+          "response": [
+            {
+              "name": "Users Success Example",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"status\": \"Success\",\n  \"message\": \"Users fetched successfully\",\n  \"data\": [\n    {\n      \"id\": \"6acf3bd160ea3589df9e02e1\",\n      \"name\": \"Docconnect\",\n      \"occupation\": \"Healthcare Technology\",\n      \"profileImage\": \"http://localhost:5000/images/user2.png\",\n      \"connectionsCount\": 2,\n      \"isRequested\": false\n    }\n  ]\n}"
+            },
+            {
+              "name": "Users Empty/Error Example",
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"status\": 404,\n  \"message\": \"User list not have\",\n  \"data\": []\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Current User (/me)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["me"]
+            },
+            "description": "Get current static user profile details"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{currentUserId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{currentUserId}}"]
+            },
+            "description": "Get single user details by user ObjectId"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Connections",
+      "item": [
+        {
+          "name": "Send Connection Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"to\": \"{{targetUserId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/connect",
+              "host": ["{{baseUrl}}"],
+              "path": ["connect"]
+            },
+            "description": "Send connection request. Returns { status: 'Success', message: 'Request has be Sended' }"
+          },
+          "response": [
+            {
+              "name": "Connect Success Example",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"status\": \"Success\",\n  \"message\": \"Request has be Sended\",\n  \"data\": {\n    \"from\": \"6acf3bd160ea3589df9e02e0\",\n    \"to\": \"6acf3bd160ea3589df9e02e1\"\n  }\n}"
+            },
+            {
+              "name": "Connect Already Sent Example",
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"status\": 400,\n  \"message\": \"Request will be All ready Send\"\n}"
+            },
+            {
+              "name": "Connect Failed Example",
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"status\": 400,\n  \"message\": \"failed to send Request\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Remove / Withdraw Connection",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"to\": \"{{targetUserId}}\",\n  \"action\": \"remove\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/connect",
+              "host": ["{{baseUrl}}"],
+              "path": ["connect"]
+            },
+            "description": "Withdraw / remove connection request"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "System",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "API Health check"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
